@@ -1,8 +1,21 @@
 .textfield-box {
   %form-control {
     background-color: $textfield-box-bg;
-    border-radius: $textfield-box-border-radius;
+    border-radius: $textfield-box-border-radius $textfield-box-border-radius 0 0;
     padding: $textfield-box-padding-y $textfield-box-padding-x calc(#{$textfield-box-padding-y} - #{$textfield-border-width});
+    transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1); //addition TODO
+
+    &::placeholder {
+      color: $textfield-box-placeholder-color;
+    }
+
+    &:hover {
+      background-color: $textfield-box-bg-hover;
+    }
+
+    &:focus {
+      background-color: $textfield-box-bg-focus;
+    }
   }
 
   %form-select {
@@ -10,22 +23,24 @@
   }
 
   %form-textarea {
-    border-width: 0 0 $textfield-border-width 0;
+    border-radius: $textfield-box-border-radius $textfield-box-border-radius 0 0;
+    border-width: 0 0 $textfield-border-width;
     padding: $textfield-box-padding-y $textfield-box-padding-x calc(#{$textfield-box-padding-y} - #{$textfield-border-width});
 
     @include hover {
-      box-shadow: inset 0 ($textfield-border-width-hover * -1) 0 ($textfield-border-width * -1) $textfield-border-color-hover;
+      border-color: $textfield-border-color-hover;
+      //box-shadow: inset 0 ($textfield-border-width-hover * -1) 0 ($textfield-border-width * -1) $textfield-border-color-hover;
     }
 
     &:focus {
+      border-color: $textfield-border-color-focus;
       box-shadow: inset 0 ($textfield-border-width-focus * -1) 0 ($textfield-border-width * -1) $textfield-border-color-focus;
     }
   }
 
   // Form control sizing
 
-  // stylelint-disable-next-line order/order, selector-no-qualifying-type
-  textarea.form-control {
+  textarea.form-control { // stylelint-disable-line
     min-height: $textfield-box-height;
   }
 
@@ -50,8 +65,7 @@
 
   // Form control sizing
 
-  // stylelint-disable-next-line order/order, selector-no-qualifying-type
-  textarea.form-control {
+  textarea.form-control { // stylelint-disable-line order/order, selector-no-qualifying-type
     min-height: $textfield-box-height-lg;
   }
 

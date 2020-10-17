@@ -61,9 +61,10 @@
 // Standard curve: relative movement
 
 @mixin transition-standard($property...) {
-  transition-duration: $transition-duration-mobile;
+  /* transition: $transition-duration-mobile;
   transition-property: $property;
-  transition-timing-function: $transition-timing-function-standard;
+  transition-timing-function: $transition-timing-function-standard; */
+  transition: $property $transition-duration-mobile $transition-timing-function-standard;
 
   @include media-breakpoint-up(sm) {
     transition-duration: $transition-duration-tablet;
@@ -92,6 +93,32 @@
   @include media-breakpoint-up(lg) {
     transition-duration: $transition-duration-desktop-complex;
   }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Selection control
+
+@mixin transition-control($property...) {
+  transition: $property $transition-duration-control $transition-timing-function-standard;
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+@mixin transition-dialog-opening($property...) {
+  transition: $property $transition-duration-desktop-entering $transition-timing-function-deceleration;
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+@mixin transition-dialog-leaving($property...) {
+  transition: $property $transition-duration-desktop-leaving $transition-timing-function-acceleration;
 
   @media screen and (prefers-reduced-motion: reduce) {
     transition: none;

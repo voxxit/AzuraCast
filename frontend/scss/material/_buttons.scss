@@ -1,0 +1,235 @@
+// Btn raised : https://material.io/design/components/buttons.html#
+// Todo btn-light color, btn-light-outline
+
+.btn {
+  @include border-radius($btn-border-radius);
+  @include transition-standard(all);
+
+  align-items: center;
+  background-color: transparent;
+  background-image: none;
+  border: 0;
+  box-shadow: map-get($btn-elevation-shadow, shadow);
+  color: $btn-color;
+  display: inline-flex;
+  font-size: $btn-font-size;
+  font-weight: $btn-font-weight;
+  height: $btn-height;
+  justify-content: center;
+  letter-spacing: 0.0892857143em;
+  line-height: inherit;
+  margin: 0;
+  max-width: 100%;
+  min-width: $btn-min-width;
+  outline: none;
+  padding: $btn-padding-y $btn-padding-x;
+  position: relative; // For badges
+  // text-decoration: none;
+  text-transform: uppercase;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  @include hover-focus {
+    box-shadow: map-get($btn-elevation-shadow-hover, shadow);
+    outline: 0;
+    text-decoration: none;
+  }
+
+  &:hover,
+  &.hover {
+    background-image: linear-gradient(to bottom, rgba($black, $overlay-hover-white-opacity), rgba($black, $overlay-hover-white-opacity));
+    color: inherit;
+  }
+
+  &:focus,
+  &.focus {
+    background-image: linear-gradient(to bottom, rgba($black, $overlay-focus-white-opacity), rgba($black, $overlay-focus-white-opacity));
+  }
+
+  &:active,
+  &.active {
+    box-shadow: map-get($btn-elevation-shadow-active, shadow);
+  }
+
+  // stylelint-disable-next-line
+  @if not $enable-ripple {
+    &:active {
+      background-image: linear-gradient(to bottom, rgba($black, $overlay-pressed-white-opacity), rgba($black, $overlay-pressed-white-opacity));
+    }
+  } @else {
+    &.active {
+      background-image: linear-gradient(to bottom, rgba($black, $overlay-pressed-white-opacity), rgba($black, $overlay-pressed-white-opacity));
+      transition: background-image 0.2s;
+    }
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: $btn-bg-disabled;
+    background-image: none;
+    box-shadow: none;
+    color: $btn-color-disabled;
+    pointer-events: none;
+  }
+
+  // TODO: verify
+  .show > &.dropdown-toggle {
+    background-image: linear-gradient(to bottom, rgba($white, $overlay-pressed-colored-opacity), rgba($white, $overlay-pressed-colored-opacity));
+  }
+}
+
+// stylelint-disable-next-line
+a.btn:not([class*='btn-flat']):not([class*='btn-outline']):enabled:hover {
+  color: $white;
+}
+
+//
+// Alternate buttons
+//
+
+@each $color,
+  $values in $theme-colors {
+  .btn-#{$color} {
+    @if $color=='light' {
+      background-color: $white;
+    }
+
+    @else {
+      background-color: theme-color($color);
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: color-yiq(theme-color($color));
+      }
+
+      &:hover {
+        background-image: linear-gradient(to bottom, rgba($white, $overlay-hover-colored-opacity), rgba($white, $overlay-hover-colored-opacity));
+      }
+
+      &:focus,
+      &.focus {
+        background-image: linear-gradient(to bottom, rgba($white, $overlay-focus-colored-opacity), rgba($white, $overlay-focus-colored-opacity));
+      }
+
+      // stylelint-disable-next-line
+      @if not $enable-ripple {
+        &:active,
+        &.active {
+          background-image: linear-gradient(to bottom, rgba($white, $overlay-pressed-colored-opacity), rgba($white, $overlay-pressed-colored-opacity));
+        }
+      }
+      @else {
+        &.active {
+          background-image: linear-gradient(to bottom, rgba($white, $overlay-pressed-colored-opacity), rgba($white, $overlay-pressed-colored-opacity));
+          transition: background-image 15ms linear 0.2s;
+        }
+      }
+    }
+
+    color: color-yiq(theme-color($color)); //stylelint-disable-line
+  }
+}
+
+// TODO: make sure still useful
+[class*='bg-dark'] .btn {
+  &:disabled,
+  &.disabled {
+    background-color: $btn-bg-disabled-inverse;
+    color: $btn-color-disabled-inverse;
+  }
+}
+
+[class*='bg-outline']:hover,
+[class*='bg-outline']:active {
+  box-shadow: none;
+  transition: background-color 100ms linear;
+}
+
+//
+// Button Sizes
+//
+
+.btn-lg,
+%btn-lg {
+  font-size: $btn-font-size-lg;
+  height: $btn-height-lg;
+}
+
+.btn-sm,
+%btn-sm {
+  height: $btn-height-sm;
+}
+
+.btn-xs,
+%btn-xs {
+  height: $btn-height-xs;
+}
+
+//
+// Block button
+//
+
+.btn-block {
+  margin: 0;
+  width: 100%;
+
+  + .btn-block {
+    margin-top: $btn-block-margin-y;
+    margin-left: 0;
+  }
+}
+
+// Specificity overrides
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  &.btn-block {
+    width: 100%;
+  }
+}
+
+// Link button : see button-flat
+
+// No minimum width
+.btn-fluid {
+  min-width: 0;
+}
+
+// Material design addition
+
+.btn-shaped {
+  border-radius: $btn-height / 2;
+
+  &.btn-lg {
+    border-radius: $btn-height-lg / 2;
+  }
+
+  &.btn-sm {
+    border-radius: $btn-height-sm / 2;
+  }
+
+  &.btn-xs {
+    border-radius: $btn-height-xs / 2;
+  }
+}
+
+// Add icon in front of a button. Prevent collision with btn-icon component.
+
+.btn-icon-prepend {
+  .btn & {
+    display: inline-block;
+    fill: currentColor;
+    font-size: $btn-icon-size;
+    margin-right: $spacer-sm;
+    margin-left: -$spacer-xs;
+    vertical-align: top;
+    width: $btn-icon-size;
+  }
+
+  [class*='btn-flat'],
+  .btn-link & {
+    margin-left: 0;
+  }
+}

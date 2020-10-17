@@ -1,45 +1,41 @@
 .nav-tabs {
-  box-shadow: inset 0 ($nav-tab-border-width * -2) 0 ($nav-tab-border-width * -1) $nav-tab-border-color;
+  flex-wrap: nowrap;
+  width: 100%; // addition
 
-  &.border-0,
-  &.border-bottom-0 {
-    box-shadow: none;
+  &.nav-inverse .nav-link {
+    color: rgba($white, $white-hint-opacity);
+
+    &.active {
+      color: $white;
+    }
+
+    &::before {
+      background-color: $white;
+    }
   }
 
   .nav-link {
     @include transition-standard(background-color, color, opacity);
+    @include text-truncate;
 
+    align-items: center;
     color: $nav-tab-color;
+    display: flex;
+    flex: 1 0 auto;
     font-size: $nav-tab-font-size;
     font-weight: $nav-tab-font-weight;
-    line-height: $nav-tab-line-height;
-    min-height: $nav-tab-height;
-    opacity: $nav-tab-link-opacity;
-    padding: $nav-tab-link-padding-y $nav-tab-link-padding-x;
+    height: $nav-tab-height;
+    justify-content: center;
+    letter-spacing: $nav-tab-letter-spacing;
+    line-height: 2.25rem;
+    //max-width: 22.5rem;
+    min-width: 5.625rem;
+    padding: 0 $nav-tab-link-padding-x;
     position: relative;
     text-transform: uppercase;
 
-    @include active-focus-hover {
-      background-color: $nav-tab-bg-hover;
-    }
-
-    &.active,
-    &:active {
-      opacity: 1;
-    }
-
-    &.active {
-      color: $nav-tab-color-active;
-
-      &::before {
-        opacity: 1;
-      }
-    }
-
-    &.disabled {
-      background-color: transparent;
-      color: $nav-tab-color-disabled;
-      opacity: 1;
+    @include media-breakpoint-up(xl) {
+      & { padding: 0 $nav-tab-link-padding-x-desktop; }
     }
 
     &::before {
@@ -55,14 +51,58 @@
       bottom: 0;
       left: 0;
     }
+
+    &:hover {
+      background-color: rgba(selection-theme-color(), $overlay-hover-white-opacity);
+    }
+
+    &:focus {
+      background-color: rgba(selection-theme-color(), $overlay-focus-white-opacity);
+    }
+
+    &:active {
+      background-color: rgba(selection-theme-color(), $overlay-pressed-white-opacity);
+      opacity: 1;
+    }
+
+    // stylelint-disable
+    &.flex-column {
+      height: 4.5rem;
+
+      i,
+      [class*='material-icons'] {
+        margin: .75rem 0 -3px;
+      }
+    }
+
+    &.active {
+      color: $nav-tab-color-active;
+
+      &::before {
+        opacity: 1;
+      }
+    }
+    // stylelint-enable
+
+    &.disabled {
+      background-color: transparent;
+      color: $nav-tab-color-disabled;
+      opacity: 1;
+    }
+
+    i,
+    [class*='material-icons'] {
+      margin-right: $spacer-sm;
+    }
   }
 
   .nav-item.show .nav-link {
     background-color: $nav-tab-bg-hover;
-    opacity: 1;
+    //opacity: 1;
   }
 }
 
+// Animated bottom bar
 .nav-tabs-material {
   position: relative;
 
@@ -94,23 +134,19 @@
     .nav-tabs-scrollable & {
       bottom: $nav-tab-height;
     }
+
+    .nav-inverse & {
+      background-color: $white;
+    }
   }
 }
 
 .nav-tabs-scrollable {
-  box-shadow: inset 0 ($nav-tab-border-width * -2) 0 ($nav-tab-border-width * -1) $nav-tab-border-color;
-  height: $nav-tab-height;
-  overflow: hidden;
-
   .nav-tabs {
-    box-shadow: none;
     flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: $nav-tab-height;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    padding-left: 2.5rem;
   }
 }

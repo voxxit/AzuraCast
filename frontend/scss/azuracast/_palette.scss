@@ -1,0 +1,53 @@
+$primary: (
+    color: $material-color-blue-500,
+    dark: $material-color-blue-600,
+    light: $material-color-blue-400
+);
+
+$secondary: (
+    color: $material-color-grey-600,
+    dark: $material-color-grey-800,
+    light: $material-color-grey-400
+);
+
+// "-bg" is light for light themes, dark for dark themes.
+$bg: (
+    color: $material-color-grey-100,
+    dark: $material-color-grey-300,
+    light: $material-color-grey-050
+) !default;
+
+// "-inverse" is dark for light themes, light for dark themes.
+$inverse: (
+    color: $material-color-grey-800,
+    dark: $material-color-grey-900,
+    light: $material-color-grey-600
+) !default;
+
+@if $theme == 'dark' {
+  $bg: (
+      color: $material-color-grey-800,
+      dark: $material-color-grey-900,
+      light: $material-color-grey-600
+  );
+
+  // "-inverse" is dark for light themes, light for dark themes.
+  $inverse: (
+      color: $material-color-grey-100,
+      dark: $material-color-grey-300,
+      light: $material-color-grey-050
+  );
+}
+
+$theme-colors: map-merge($theme-colors, (
+    primary: $primary,
+    secondary: $secondary,
+    danger: $danger,
+    info: $info,
+    success: $success,
+    warning: $warning,
+    dark: $dark,
+    light: $light,
+    bg: $bg,
+    inverse: $inverse
+));

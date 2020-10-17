@@ -1,21 +1,49 @@
+// https://material-components.github.io/material-components-web-catalog/#/component/fab
+
 .btn-float {
   border-radius: 50%;
   box-shadow: map-get($btn-float-elevation-shadow, shadow);
   height: $btn-float-size;
-  line-height: $btn-float-size;
+  //line-height: $btn-float-size;
   min-width: 0;
   padding: 0;
   width: $btn-float-size;
 
-  &.active,
-  &:active {
+  &:hover {
+    box-shadow: map-get($btn-float-elevation-shadow-hover, shadow);
+  }
+
+  &:active,
+  &.active {
     box-shadow: map-get($btn-float-elevation-shadow-active, shadow);
   }
 
-  &.disabled,
-  &:disabled {
+  &:disabled,
+  &.disabled {
     box-shadow: none;
   }
+
+  // Extended FAB
+  // stylelint-disable order/order, selector-no-qualifying-type
+  &-extended {
+    border-radius: $btn-float-extended-border-radius;
+    height: $btn-float-extended-height;
+    line-height: $btn-float-extended-line-height;
+    padding: 0 $btn-float-extended-padding-x;
+    width: auto;
+
+    > i,
+    > [class*='material-icons'] {
+      margin-right: 0.75rem;
+      margin-left: -$spacer-sm;
+
+      &[class*='order-'] {
+        margin-right: -$spacer-sm;
+        margin-left: 0.75rem;
+      }
+    }
+  }
+  // stylelint-enable order/order, selector-no-qualifying-type
 
   &.btn-sm {
     height: $btn-float-size-sm;
@@ -43,5 +71,25 @@
       margin-bottom: $btn-float-dropdown-inner-spacer-y;
       margin-left: auto;
     }
+  }
+}
+
+.fab-actions {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: $spacer-lg;
+  bottom: $spacer-lg;
+  z-index: map-get(map-get($elevation-shadows, 12), elevation);
+
+  @media print {
+    & {
+      display: none;
+    }
+  }
+
+  & > .btn {
+    margin-top: 1.25rem;
   }
 }

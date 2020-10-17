@@ -89,8 +89,9 @@ var jsFiles = {
     ]
   },
   'zxcvbn': {
-    base: 'node_modules/zxcvbn/dist',
+    base: null,
     files: [
+      'js/plugins/plugin-zxcvbn.js',
       'node_modules/zxcvbn/dist/zxcvbn.js'
     ]
   },
@@ -185,8 +186,9 @@ var jsFiles = {
   'bootgrid': {
     base: null,
     files: [
-      'js/bootgrid/jquery.bootgrid.min.css',
-      'js/bootgrid/jquery.bootgrid.updated.js'
+      'js/plugins/plugin-bootgrid.min.css',
+      'js/plugins/plugin-bootgrid-core.js',
+      'js/plugins/plugin-bootgrid-extra.js'
     ]
   },
   'bootstrap-vue': {
@@ -246,10 +248,11 @@ gulp.task('build-vue', function () {
 });
 
 gulp.task('build-js', function () {
-  return gulp.src(['./js/*.js'])
-    .pipe(sourcemaps.init())
+  return gulp.src(['./js/index.js'])
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
     .pipe(uglify())
-    .pipe(sourcemaps.write())
     .pipe(gulp.dest('../web/static/dist'));
 });
 

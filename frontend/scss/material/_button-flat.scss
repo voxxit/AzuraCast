@@ -1,41 +1,121 @@
+// Btn flat and outlined
+// Material guidelines : https://material.io/design/components/buttons.html#specs
+// Material Web component : https://material-components.github.io/material-components-web-catalog/#/component/button?type=text
+
 [class*='btn-flat'],
+.btn-link,
+.card-link,
+.modal .btn {
+  padding: $btn-padding-y $btn-flat-padding-x;
+}
+
 [class*='btn-outline'] {
-  background-color: transparent;
-  box-shadow: none;
+  border: 1px solid currentColor;
+  padding: $btn-padding-y calc(#{$btn-padding-x} - 1px);
 
-  &.active,
-  &:active {
-    box-shadow: none;
-  }
-
-  &.disabled,
-  &:disabled {
-    background-color: transparent;
+  &:disabled,
+  &.disabled {
+    border-color: $btn-color-disabled;
   }
 }
 
-@each $color, $values in $theme-colors {
+[class*='btn-flat'],
+[class*='btn-outline'],
+.btn-link,
+.card-link,
+.modal .btn {
+  background: transparent;
+  box-shadow: none;
+
+  @include hover-focus-active {
+    box-shadow: inherit;
+  }
+}
+
+@each $color,
+  $values in $theme-colors {
   .btn-flat-#{$color},
-  .btn-outline-#{$color} {
-    @include plain-active-focus-hover {
-      color: theme-color($color);
+  .btn-outline-#{$color},
+  .modal .btn-#{$color} {
+    @if ($color !='dark') {
+      @include plain-hover-focus {
+        color: theme-color($color);
+      }
     }
 
-    &.disabled,
-    &:disabled {
+    @if ($color !='dark' and $color !='light') {
+      &:hover {
+        background-image: linear-gradient(to bottom, rgba(theme-color($color), $overlay-hover-white-opacity), rgba(theme-color($color), $overlay-hover-white-opacity));
+      }
+
+      &:focus {
+        background-image: linear-gradient(to bottom, rgba(theme-color($color), $overlay-focus-white-opacity), rgba(theme-color($color), $overlay-focus-white-opacity));
+      }
+
+      // stylelint-disable-next-line
+      @if not $enable-ripple {
+        &:active {
+          background-image: linear-gradient(to bottom, rgba(theme-color($color), $overlay-pressed-white-opacity), rgba(theme-color($color), $overlay-pressed-white-opacity));
+        }
+      }
+    }
+
+    &:disabled,
+    &.disabled {
       color: $btn-color-disabled;
     }
   }
+
+  .btn-outline-#{$color} {
+    border-color: theme-color($color);
+  }
 }
 
+.btn-link,
+.card-link {
+  @extend .btn-flat-primary;
+}
+
+/*
 .btn-flat-light,
 .btn-outline-light {
-  @include focus-hover {
+  @include hover-focus {
     background-image: linear-gradient(to bottom, $btn-overlay-inverse, $btn-overlay-inverse);
   }
 
   &.active,
   &:active {
     background-color: $btn-bg-active-inverse;
+  }
+}
+*/
+
+// Btn-icon addition
+.btn-icon {
+  border-radius: 50%;
+  box-shadow: none;
+  color: initial;
+  font-size: 1.5rem;
+  height: $btn-icon-width;
+  min-width: 0;
+  padding: 0;
+  transition: background-color 15ms linear;
+  width: $btn-icon-width;
+
+  &.btn-sm {
+    height: $btn-icon-width-sm;
+    width: $btn-icon-width-sm;
+  }
+
+  &.btn-xs {
+    height: $btn-icon-width-xs;
+    width: $btn-icon-width-xs;
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    box-shadow: none;
+    color: initial;
   }
 }

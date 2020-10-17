@@ -1,35 +1,36 @@
 .breadcrumb {
-  @include border-radius($breadcrumb-border-radius);
-
   align-items: center;
-  background-color: $breadcrumb-bg;
+  //background-color: $breadcrumb-bg;
   display: flex;
   flex-wrap: wrap;
-  list-style: none;
-  margin-bottom: $breadcrumb-margin-y;
-  min-height: $breadcrumb-height;
-  padding: $breadcrumb-padding-y $breadcrumb-padding-x;
+  padding: 0; // reset Firefox
 }
 
 .breadcrumb-item {
-  @include transition-standard(color);
-
   align-items: center;
   color: $breadcrumb-item-color;
   display: flex;
-
-  @include active-focus-hover {
-    color: $breadcrumb-item-color-hover;
-  }
+  font-size: $breadcrumb-font-size;
 
   &.active {
-    color: $breadcrumb-item-color-hover;
-    font-weight: bolder;
+    cursor: default;
+  }
+
+  &:only-child {
+    padding: $breadcrumb-padding-y $breadcrumb-padding-x;
   }
 
   a {
+    @include transition-standard(background-color);
+
+    border-radius: $spacer-sm;
     color: inherit;
+    padding: $breadcrumb-padding-y $breadcrumb-padding-x;
     text-decoration: none;
+
+    &:hover {
+      background-color: $breadcrumb-bg-hover;
+    }
   }
 
   + .breadcrumb-item {
@@ -38,10 +39,16 @@
     &::before {
       @include set-material-icons;
 
-      color: $breadcrumb-item-color;
-      content: $breadcrumb-item-icon;
+      color: $black-secondary;
+      content: $breadcrumb-divider;
       display: inline-block;
       margin-right: $breadcrumb-inner-spacer-x;
     }
   }
+
+  // stylelint-disable
+  &.active::before {
+    margin-right: $breadcrumb-padding-x;
+  }
+  // stylelint-enable
 }

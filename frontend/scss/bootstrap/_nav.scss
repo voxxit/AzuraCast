@@ -7,16 +7,24 @@
 }
 
 .nav-link {
+  color: selection-theme-color();
   display: block;
   padding: $nav-link-padding-y $nav-link-padding-x;
 
-  @include active-focus-hover {
+  @include hover-focus {
     text-decoration: none;
   }
 
+  // Disabled state lightens text
   &.disabled {
     color: $nav-link-color-disabled;
     cursor: default;
+    pointer-events: none;
+  }
+
+  &:hover,
+  &.active {
+    color: darken(selection-theme-color(), 16%);
   }
 }
 
@@ -31,9 +39,13 @@
 
 .nav-justified {
   .nav-item {
-    flex-basis: 0;
-    flex-grow: 1;
-    text-align: center;
+    @include text-truncate;
+
+    display: flex;
+    flex: 1;
+    //flex-basis: 0;
+    //flex-grow: 1;
+    //text-align: center;
   }
 }
 
@@ -47,7 +59,7 @@
     color: $nav-pills-color;
     opacity: $nav-pills-link-opacity;
 
-    @include active-focus-hover {
+    @include hover-focus-active {
       background-color: $nav-pills-bg-hover;
     }
 

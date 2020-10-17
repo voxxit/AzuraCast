@@ -1,13 +1,18 @@
+// todo : btn-group disabled
+
 .btn-group,
 .btn-group-vertical {
   @include border-radius($btn-border-radius);
 
   background-color: $btn-group-bg;
+  //border: 1px solid $black-divider;
+  box-shadow: map-get($btn-elevation-shadow, shadow);
   display: inline-flex;
   position: relative;
-  vertical-align: middle;
+  //vertical-align: middle;
 
-  @each $color, $values in $theme-colors {
+  @each $color,
+    $values in $theme-colors {
     > .btn-#{$color} {
       &.disabled,
       &:disabled {
@@ -18,35 +23,49 @@
   }
 
   > .btn {
-    @include transition-standard(border-color, opacity);
+    // @include transition-standard(opacity);
 
     box-shadow: none;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-width: 0;
+    padding-right: $btn-group-padding-x;
+    padding-left: $btn-group-padding-x;
+    position: relative;
 
-    &.active,
-    &:active {
-      box-shadow: none;
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      z-index: 1;
     }
 
-    &.disabled,
-    &:disabled {
+    &:active,
+    &.active {
+      background-color: rgba($black, $overlay-activated-white-opacity);
+    }
+
+    &:disabled,
+    &.disabled {
       opacity: $btn-group-toggle-opacity;
     }
 
+    // stylelint-disable
     &[class*='btn-outline'] {
-      opacity: $btn-group-toggle-opacity;
+      border: 0;
+      //opacity: $btn-group-toggle-opacity;
 
       &.active,
       &:active {
-        opacity: 1;
+        background-color: rgba($black, $overlay-activated-white-opacity);
+        //opacity: 1;
       }
 
       &.disabled,
       &:disabled {
-        opacity: 1;
+        //opacity: 1;
       }
     }
+    // stylelint-enable
   }
 
   > .btn-group,
@@ -59,7 +78,7 @@
 }
 
 .btn-group {
-  &.show > .btn.dropdown-toggle {
+  &.show > .dropdown-toggle {
     box-shadow: none;
   }
 
@@ -102,6 +121,7 @@
     margin-top: 0;
   }
 
+  // Reset rounded corners
   > .btn:not(:first-child),
   > .btn-group:not(:first-child) > .btn {
     @include border-top-radius(0);
@@ -114,17 +134,17 @@
   }
 }
 
-.btn-group-fluid {
+/* .btn-group-fluid {
   background-color: transparent;
   box-shadow: none;
+} */
+
+.btn-group-sm > .btn {
+  @extend %btn-sm;
 }
 
 .btn-group-lg > .btn {
   @extend %btn-lg;
-}
-
-.btn-group-sm > .btn {
-  @extend %btn-sm;
 }
 
 // Checkbox and radio options
@@ -143,24 +163,15 @@
   }
 }
 
-// Split button dropdown
-
-.dropdown-toggle.dropdown-toggle-split {
-  padding-right: $caret-spacer-x;
-  padding-left: $caret-spacer-x;
-
-  &::after {
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  .dropleft & {
-    &::before {
-      margin-right: 0;
-      margin-left: 0;
-    }
-  }
+/* .btn-sm + .dropdown-toggle-split {
+  padding-right: $btn-padding-x-sm * .75;
+  padding-left: $btn-padding-x-sm * .75;
 }
+
+.btn-lg + .dropdown-toggle-split {
+  padding-right: $btn-padding-x-lg * .75;
+  padding-left: $btn-padding-x-lg * .75;
+} */
 
 // Toolbar
 
@@ -171,5 +182,21 @@
 
   .input-group {
     width: auto;
+  }
+}
+
+// Checkbox and radio options
+
+.btn-group-toggle {
+  > .btn,
+  > .btn-group > .btn {
+    margin-bottom: 0; // Override default `<label>` value
+
+    [type='radio'],
+    [type='checkbox'] {
+      clip: rect(0, 0, 0, 0);
+      pointer-events: none;
+      position: absolute;
+    }
   }
 }

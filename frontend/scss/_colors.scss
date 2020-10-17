@@ -275,6 +275,7 @@ $material-color-yellow-a400:      #ffea00 !default;
 $material-color-yellow-a700:      #ffd600 !default;
 
 // stylelint-disable scss/dollar-variable-default
+
 $ambers: () !default;
 $ambers: map-merge(
   (
@@ -687,7 +688,8 @@ $colors: map-merge(
   ),
   $colors
 );
-// stylelint-enable
+
+// stylelint-enable scss/dollar-variable-default
 
 // Black and white
 // Based on https://material.google.com/style/color.html#color-text-background-colors
@@ -695,36 +697,55 @@ $colors: map-merge(
 $black:                   #000000 !default;
 
 $black-primary-opacity:   0.87 !default;
+$black-caption-opacity:   0.6 !default; // Form helper text
 $black-secondary-opacity: 0.54 !default;
 $black-hint-opacity:      0.38 !default;
 $black-divider-opacity:   0.12 !default;
 
-$black-primary:           rgba(red($black), green($black), blue($black), $black-primary-opacity) !default;
-$black-secondary:         rgba(red($black), green($black), blue($black), $black-secondary-opacity) !default;
-$black-hint:              rgba(red($black), green($black), blue($black), $black-hint-opacity) !default;
-$black-divider:           rgba(red($black), green($black), blue($black), $black-divider-opacity) !default;
+$black-primary:           rgba($black, $black-primary-opacity) !default;
+$black-caption:           rgba($black, $black-caption-opacity) !default;
+$black-secondary:         rgba($black, $black-secondary-opacity) !default;
+$black-hint:              rgba($black, $black-hint-opacity) !default;
+$black-divider:           rgba($black, $black-divider-opacity) !default;
 
 $white:                   #ffffff !default;
 
 $white-primary-opacity:   1 !default;
 $white-secondary-opacity: 0.7 !default;
 $white-hint-opacity:      0.5 !default;
-$white-divider-opacity:   0.12 !default;
+$white-divider-opacity:   $black-divider-opacity !default;
 
-$white-primary:           rgba(red($white), green($white), blue($white), $white-primary-opacity) !default;
-$white-secondary:         rgba(red($white), green($white), blue($white), $white-secondary-opacity) !default;
-$white-hint:              rgba(red($white), green($white), blue($white), $white-hint-opacity) !default;
-$white-divider:           rgba(red($white), green($white), blue($white), $white-divider-opacity) !default;
+$white-primary:           rgba($white, $white-primary-opacity) !default;
+$white-secondary:         rgba($white, $white-secondary-opacity) !default;
+$white-hint:              rgba($white, $white-hint-opacity) !default;
+$white-divider:           rgba($white, $white-divider-opacity) !default;
+
+// States
+// Based on https://material.io/design/interaction/states.html#usage
+
+$overlay-hover-colored-opacity:     0.08 !default;
+$overlay-focus-colored-opacity:     0.24 !default;
+$overlay-selected-colored-opacity:  0.16 !default;
+$overlay-activated-colored-opacity: 0.24 !default;
+$overlay-pressed-colored-opacity:   0.32 !default;
+//$overlay-dragged-colored-opacity:   .16 !default;
+
+$overlay-hover-white-opacity:     0.04 !default;
+$overlay-focus-white-opacity:     0.12 !default;
+$overlay-selected-white-opacity:  0.08 !default;
+$overlay-activated-white-opacity: 0.12 !default;
+$overlay-pressed-white-opacity:   0.12 * 2 !default;
+//$overlay-dragged-white-opacity:   .08 !default;
 
 // Theme
 // Based on https://material.google.com/style/color.html#color-themes
 
-$dark-theme-1:  #22252f !default;
-$dark-theme-2:  #242731;
-$dark-theme-3:  #2D2F39 !default;
-$dark-theme-4:  #3a3c43;
+$dark-theme-1:  $black !default;
+$dark-theme-2:  $material-color-grey-900 !default;
+$dark-theme-3:  #303030 !default;
+$dark-theme-4:  #3c3c46 !default;
 
-$light-theme-1: #edecec !default;
-$light-theme-2: #f7f7f7 !default;
+$light-theme-1: $material-color-grey-300 !default;
+$light-theme-2: $material-color-grey-100 !default;
 $light-theme-3: $material-color-grey-050 !default;
-$light-theme-4: #ffffff !default;
+$light-theme-4: $white !default;

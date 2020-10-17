@@ -1,70 +1,276 @@
-// Todo: expansion panel with different background colours
+// Todo: expansion panel with different background colors
+// Todo : lga.active:hover/focus/active
+// Todo : li divider
 
 .list-group {
+  border: 1px solid $black-divider;
+  border-radius: $expansion-panel-border-radius;
   display: flex;
   flex-direction: column;
+  list-style-type: none; // Reset Firefox ::marker
   margin-bottom: 0;
-  padding-left: 0;
+  padding: $spacer-sm 0;
 }
 
 .list-group-item {
-  @include transition-standard(background-color, color);
-
+  align-items: center;
   background-color: $expansion-panel-bg;
-  box-shadow: map-get($expansion-panel-elevation-shadow, shadow);
+  border: 0;
   color: $expansion-panel-color;
   display: block;
   font-size: $expansion-panel-font-size;
+  letter-spacing: $expansion-panel-letter-spacing;
   line-height: $expansion-panel-line-height;
+  // margin-bottom: -$list-group-border-width;
   min-height: $expansion-panel-height;
   padding: $expansion-panel-padding-y $expansion-panel-padding-x;
   position: relative;
+  transition: background-color 15ms linear;
 
-  @include active-focus-hover {
-    color: $expansion-panel-color;
+  @include hover-focus-active {
     text-decoration: none;
   }
 
-  &.active {
-    background-color: $expansion-panel-bg-active;
-    color: $expansion-panel-color;
-  }
-
-  &.disabled,
-  &:disabled {
-    background-color: $expansion-panel-bg;
-    color: $expansion-panel-color-disabled;
-  }
-
-  &:last-child {
-    @include border-bottom-radius($expansion-panel-border-radius);
+  // Material lists
+  &.d-flex {
+    flex-wrap: nowrap;
+    min-height: 3rem;
+    padding: 0 $spacer;
   }
 
   .card & {
     padding-right: $card-padding-x;
     padding-left: $card-padding-x;
   }
-}
 
-.list-group-item-action {
-  color: $expansion-panel-color;
-  text-align: inherit;
-  width: 100%;
+  .btn-icon {
+    color: $black-caption;
+  }
 
-  @include active-focus-hover {
-    background-color: $expansion-panel-bg-active;
-    color: $expansion-panel-color;
-    text-decoration: none;
+  // Prepend icon
+  .list-group-item-icon {
+    color: $black-secondary;
+    display: inline-block;
+    fill: currentColor;
+    font-size: $list-group-item-icon-size;
+    height: $list-group-item-icon-size;
+    margin-right: 2 * $spacer;
+    vertical-align: top;
+    width: $list-group-item-icon-size;
+  }
+
+  // stylelint-disable-next-line
+  &.active .list-group-item-icon {
+    color: $expansion-panel-color-selected;
+  }
+
+  // Prepend Avatar
+  .list-group-item-graphic {
+    border-radius: 50%;
+    color: $list-group-item-graphic-color;
+    fill: $list-group-item-graphic-color;
+    font-size: $list-group-item-graphic-width;
+    height: $list-group-item-graphic-width;
+    line-height: $list-group-item-graphic-width;
+    margin: $spacer-sm $spacer $spacer-sm 0;
+    width: $list-group-item-graphic-width;
+  }
+
+  .list-group-shaped & {
+    border-radius: 0 2rem 2rem 0;
+  }
+
+  // List checkbox and radio
+  .custom-control {
+    display: flex;
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .custom-control-label {
+    flex-grow: 1;
+    font-size: inherit;
+    letter-spacing: inherit;
+    line-height: $expansion-panel-height;
+  }
+
+  .custom-control-label::before {
+    line-height: $expansion-panel-height;
+    margin-top: 0;
+    right: 0;
+    left: auto;
+  }
+
+  .custom-control-label::after {
+    line-height: $expansion-panel-height !important; // stylelint-disable-line declaration-no-important
+    padding: 0 0.6875rem;
+    right: 0;
+    left: auto;
+  }
+
+  // stylelint-disable
+  &.active {
+    background-color: $expansion-panel-bg-selected;
+    color: $expansion-panel-color-selected;
+    z-index: 2;
+
+    &:hover {
+      background-color: $expansion-panel-bg-primary-hover;
+    }
+
+    &:focus {
+      background-color: $expansion-panel-bg-primary-focus;
+    }
   }
 
   &.disabled,
   &:disabled {
     background-color: $expansion-panel-bg;
     color: $expansion-panel-color-disabled;
+    pointer-events: none;
+  }
+  // stylelint-enable
+}
+
+// Material Two-line lists
+.list-group-item-two-line {
+  height: 4.5rem;
+
+  .list-group-item-text {
+    align-self: flex-start;
+  }
+}
+
+// Text block for long content or two-line lists
+.list-group-item-text {
+  @include text-truncate-flex;
+
+  :first-child {
+    display: block;
+    line-height: normal;
+    margin-top: 0;
+    margin-bottom: -1.25rem;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      height: 2rem;
+      vertical-align: 0;
+      width: 0;
+    }
+
+    &::after {
+      content: '';
+      display: inline-block;
+      height: 20px;
+      vertical-align: -20px;
+      width: 0;
+    }
+  }
+
+  :last-child {
+    @include typography-body-2;
+
+    color: $black-secondary;
+    display: block;
+    line-height: normal;
+    margin-top: 0;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      height: 20px;
+      vertical-align: 0;
+      width: 0;
+    }
+  }
+}
+
+// Trailing text
+.list-group-item-meta {
+  color: $black-hint;
+  margin-right: 0;
+  margin-left: auto;
+
+  &:not(i):not([class*='material-icon']) {
+    @include typography-caption;
+  }
+}
+
+// List divider
+.list-group-divider {
+  border: none;
+  border-bottom-color: $border-color;
+  border-bottom-style: solid;
+  border-bottom-width: $border-width;
+  height: 0;
+  margin: 0;
+}
+
+.list-group-item-action {
+  //color: $expansion-panel-color;
+  text-align: inherit;
+  width: 100%;
+
+  @include hover-focus {
+    &:not(.active) {
+      color: $expansion-panel-color;
+      text-decoration: none;
+      z-index: 1;
+    }
+  }
+
+  &:hover {
+    background-color: $expansion-panel-bg-hover;
+    cursor: pointer;
   }
 
   &:focus {
+    background-color: $expansion-panel-bg-focus;
     outline: 0;
+  }
+
+  // stylelint-disable-next-line
+  @if not $enable-ripple {
+    &:active {
+      background-color: $expansion-panel-bg-active;
+    }
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: $expansion-panel-bg;
+    color: $expansion-panel-color-disabled;
+  }
+}
+
+[class*='list-group-horizontal'] {
+  padding: 0;
+
+  .list-group-item {
+    border-right: 1px solid $black-divider;
+    margin-bottom: 0;
+
+    &:first-child {
+      @include border-left-radius($expansion-panel-border-radius);
+    }
+
+    &:last-child {
+      @include border-right-radius($expansion-panel-border-radius);
+
+      border-right: 0;
+      margin-right: 0;
+    }
+  }
+}
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    .list-group-horizontal#{$infix} {
+      flex-direction: row;
+    }
   }
 }
 
@@ -79,7 +285,7 @@
     }
 
     &.list-group-item-action {
-      @include active-focus-hover {
+      @include hover-focus-active {
         background-color: theme-color($color);
         color: color-yiq(theme-color($color));
       }
@@ -202,7 +408,7 @@
   text-align: inherit;
   width: 100%;
 
-  @include active-focus-hover {
+  @include hover-focus-active {
     background-color: $expansion-panel-bg-active;
     color: $expansion-panel-color;
     text-decoration: none;
@@ -227,20 +433,7 @@
 // Flush
 
 .list-group-flush {
-  &:first-child .list-group-item:first-child {
-    border-top: 0;
-  }
-
-  &:last-child .list-group-item:last-child {
-    border-bottom: 0;
-  }
-
-  .list-group-item {
-    border-top: $expansion-panel-border-width solid $expansion-panel-border-color;
-    box-shadow: none;
-
-    &:last-child {
-      border-bottom: $expansion-panel-border-width solid $expansion-panel-border-color;
-    }
-  }
+  border: 0;
+  border-radius: 0;
+  padding: 0;
 }

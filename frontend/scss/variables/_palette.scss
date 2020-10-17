@@ -1,40 +1,39 @@
-// Theme palette
-// Change these values to customise colour palettes
+// Theme palette : https://material.io/design/material-theming/implementing-your-theme.html#color
 
 $primary: (
-    color: $material-color-blue-500,
-    dark: $material-color-blue-600,
-    light: $material-color-blue-400
+    color: #6200ee,
+    dark: #3700b3,
+    light: #bb86fc
 ) !default;
 
 $secondary: (
-    color: $material-color-grey-600,
-    dark: $material-color-grey-800,
-    light: $material-color-grey-400
+    color: #03dac6,
+    dark: #018786,
+    light: #66fff8
 ) !default;
 
 $danger: (
-    color: $material-color-red-500,
+    color: #b00020,
     dark: $material-color-red-700,
-    light: $material-color-red-100
+    light: #c51162
 ) !default;
 
 $info: (
-    color: $material-color-blue-500,
-    dark: $material-color-blue-700,
-    light: $material-color-blue-100
+    color: #714cfe,
+    dark: #021aee,
+    light: #d2c2fd
 ) !default;
 
 $success: (
-    color: $material-color-green-500,
-    dark: $material-color-green-700,
-    light: $material-color-green-100
+    color: #61d800,
+    dark: #41c300,
+    light: #c6f68d
 ) !default;
 
 $warning: (
-    color: $material-color-orange-500,
-    dark: $material-color-orange-700,
-    light: $material-color-orange-100
+    color: #ff8d00,
+    dark: #ee6002,
+    light: #ffc77d
 ) !default;
 
 $dark: (
@@ -49,19 +48,6 @@ $light: (
     light: $material-color-grey-050
 ) !default;
 
-// "-bg" is light for light themes, dark for dark themes.
-$bg: (
-    color: $material-color-grey-100,
-    dark: $material-color-grey-300,
-    light: $material-color-grey-050
-) !default;
-
-// "-inverse" is dark for light themes, light for dark themes.
-$inverse: (
-    color: $material-color-grey-800,
-    dark: $material-color-grey-900,
-    light: $material-color-grey-600
-) !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -74,13 +60,18 @@ $theme-colors: map-merge(
             success: $success,
             warning: $warning,
             dark: $dark,
-            light: $light,
-            bg: $bg,
-            inverse: $inverse
+            light: $light
         ),
         $theme-colors
 );
 
-$yiq-contrasted-threshold: 150 !default;
+$yiq-contrasted-threshold: 170 !default;
 $yiq-text-dark: $black-primary !default;
 $yiq-text-light: $white-primary !default;
+
+// Characters which are escaped by the escape-svg function
+$escaped-characters: (
+        ('<', '%3c'),
+        ('>', '%3e'),
+        ('#', '%23'),
+) !default;

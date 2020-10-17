@@ -217,9 +217,6 @@ return [
                 [
                     'src' => 'dist/lib/bootgrid/jquery.bootgrid.updated.js',
                 ],
-                [
-                    'src' => 'dist/bootgrid.js',
-                ],
             ],
         ],
     ],

@@ -1,94 +1,6 @@
-// Blockquote
-
-.blockquote {
-  @include typography-title;
-
-  border-left: $blockquote-border-width solid $blockquote-border-color;
-  margin-bottom: $paragraph-margin-y;
-  padding: 0 $spacer;
-}
-
-.blockquote-footer {
-  @include typography-caption;
-
-  color: $blockquote-small-color;
-  display: block;
-  margin-top: $spacer-xs;
-
-  &::before {
-    content: '\2014 \00A0';
-  }
-}
-
-// Emphasis
-
-mark,
-.mark {
-  background-color: $mark-bg;
-  color: $mark-color;
-  padding: $mark-padding;
-}
-
-small,
-.small {
-  font-size: $small-font-size;
-  font-weight: $font-weight-regular;
-}
-
-.xs {
-  font-size: 70%;
-  font-weight: $font-weight-regular;
-}
-
-.initialism {
-  font-size: 90%;
-  text-transform: uppercase;
-}
-
-// Headings
-
-.typography-display-4 {
-  @include typography-display-4;
-}
-
-.typography-display-3 {
-  @include typography-display-3;
-}
-
-.typography-display-2 {
-  @include typography-display-2;
-}
-
-.typography-display-1 {
-  @include typography-display-1;
-}
-
-.typography-headline {
-  @include typography-headline;
-}
-
-.typography-title {
-  @include typography-title;
-}
-
-.typography-subheading {
-  @include typography-subheading;
-}
-
-.typography-body-2 {
-  @include typography-body-2;
-}
-
-.typography-body-1 {
-  @include typography-body-1;
-}
-
-.typography-caption {
-  @include typography-caption;
-}
 
 // Headings - bootstrap classes
-
+// Keep compatibility for Material UI v1
 h1,
 h2,
 h3,
@@ -107,56 +19,70 @@ h6,
 }
 
 h1,
-.h1 {
-  @include typography-display-2;
-}
+.h1,
+.display-1,
+.typography-display-4,
+.typography-headline-1 { @include typography-headline-1; }
 
 h2,
-.h2 {
-  @include typography-display-1;
-}
+.h2,
+.display-2,
+.typography-display-3,
+.typography-headline-2 { @include typography-headline-2; }
 
 h3,
-.h3 {
-  @include typography-headline;
-}
+.h3,
+.display-3,
+.typography-display-2,
+.typography-headline-3 { @include typography-headline-3; }
 
 h4,
-.h4 {
-  @include typography-title;
-}
+.h4,
+.display-4,
+.typography-display-1,
+.typography-headline-4 { @include typography-headline-4; }
 
 h5,
-.h5 {
-  @include typography-subheading;
-}
+.h5,
+.typography-headline,
+.typography-headline-5 { @include typography-headline-5; }
 
 h6,
-.h6 {
+.h6,
+.lead,
+.typography-headline-6,
+.typography-title { @include typography-headline-6; }
+
+.typography-subheading,
+.typography-subtitle-1 {
+  @include typography-subtitle-1;
+}
+
+.typography-subtitle-2 {
+  @include typography-subtitle-2;
+}
+
+.typography-body-1 {
+  @include typography-body-1;
+}
+
+.typography-body-2 {
   @include typography-body-2;
 }
 
-.display-1 {
-  @include typography-display-4;
+.typography-caption {
+  @include typography-caption;
 }
 
-.display-2 {
-  @include typography-display-3;
+.typography-overline {
+  @include typography-overline;
 }
 
-.display-3 {
-  @include typography-display-2;
-}
+p { font-size: 1rem; } // djibe addition
 
-.display-4 {
-  @include typography-display-1;
-}
-
-.lead {
-  @include typography-title;
-}
-
-// Hr
+//
+// Horizontal rules
+//
 
 hr {
   border: 0;
@@ -165,7 +91,30 @@ hr {
   margin-bottom: $paragraph-margin-y;
 }
 
-// List
+//
+// Emphasis
+//
+
+small,
+.small {
+  font-size: $small-font-size;
+  font-weight: $font-weight-regular;
+}
+
+mark,
+.mark {
+  background-color: $mark-bg;
+  color: $mark-color;
+  padding: $mark-padding;
+}
+
+//
+// Lists
+//
+
+.list-unstyled {
+  @include list-unstyled;
+}
 
 .list-inline {
   @include list-unstyled;
@@ -179,6 +128,32 @@ hr {
   }
 }
 
-.list-unstyled {
-  @include list-unstyled;
+//
+// Misc
+//
+
+.initialism {
+  font-size: 90%;
+  text-transform: uppercase;
+}
+
+// Blockquotes
+.blockquote {
+  @include typography-body-1;
+
+  border-left: $blockquote-border-width solid $blockquote-border-color;
+  margin-bottom: $paragraph-margin-y;
+  padding: 0 $spacer;
+}
+
+.blockquote-footer {
+  @include typography-caption;
+
+  color: $blockquote-small-color;
+  display: block;
+  margin-top: $spacer-xs;
+
+  &::before {
+    content: '\2014 \00A0'; // — &nbsp;
+  }
 }

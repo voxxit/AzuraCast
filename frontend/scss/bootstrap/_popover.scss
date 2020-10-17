@@ -3,11 +3,11 @@
 // Therefore, popovers are styled as Material design's dialogs
 
 .popover {
-  @include reset-text;
+  @include reset-text();
   @include border-radius($popover-border-radius);
 
   background-color: $popover-bg;
-  box-shadow: map-get($popover-elevation-shadow, shadow);
+  box-shadow: $popover-box-shadow;
   display: block;
   font-size: $popover-font-size;
   margin: $popover-margin;
@@ -15,19 +15,12 @@
   position: absolute;
   top: 0;
   left: 0;
+  word-wrap: break-word;
   z-index: map-get($popover-elevation-shadow, elevation);
 }
 
-.popover-body {
-  padding: $popover-padding-y $popover-padding-x;
-
-  > :last-child {
-    margin-bottom: 0;
-  }
-}
-
 .popover-header {
-  @include typography-title;
+  @include typography-headline-6;
 
   margin-bottom: 0;
   padding: $popover-padding-y $popover-padding-x 0;
@@ -38,6 +31,15 @@
 
   &:last-child {
     padding-bottom: $popover-padding-y;
+  }
+}
+
+.popover-body {
+  padding: $popover-padding-y $popover-padding-x;
+  // color: $popover-body-color;
+
+  > :last-child {
+    margin-bottom: 0;
   }
 }
 

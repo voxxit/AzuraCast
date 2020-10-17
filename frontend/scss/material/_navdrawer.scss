@@ -113,21 +113,29 @@
 
   .nav-link {
     @include text-truncate;
-    @include transition-standard(background-color, color);
 
+    align-items: center;
+    border-radius: $border-radius;
     color: $navdrawer-nav-link-color;
-    font-size: $navdrawer-nav-link-font-size;
+    display: flex;
+    //font-size: $navdrawer-nav-link-font-size;
     font-weight: $navdrawer-nav-link-font-weight;
-    line-height: 1;
-    padding: (($navdrawer-nav-link-height - $navdrawer-nav-link-font-size) / 2) $navdrawer-inner-spacer-x;
+    height: $navdrawer-nav-link-height;
+    letter-spacing: $letter-spacing-subtitle-2;
+    line-height: $line-height-subtitle-2;
+    margin: $spacer-sm;
+    padding: 0 $spacer-sm;
+    transition: background-color 15ms;
 
-    @include active-focus-hover {
+    @include hover-focus-active {
       background-color: $navdrawer-nav-link-bg-hover;
     }
 
     &.active,
     &:active {
+      background-color: rgba(theme-color(primary), $overlay-activated-white-opacity);
       color: $navdrawer-nav-link-color-active;
+      font-weight: $navdrawer-nav-link-font-weight;
     }
 
     &.disabled {

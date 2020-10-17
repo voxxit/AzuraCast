@@ -2,73 +2,83 @@
   background-color: $pagination-bg;
   display: flex;
   list-style: none;
-  padding: $pagination-padding-y $pagination-padding-x;
+  margin: $pagination-margin-x;
 }
 
 .page-link {
   @include border-radius($pagination-border-radius);
-  @include transition-standard(color);
+  @include transition-standard(all);
 
-  background-color: transparent;
-  background-image: none;
-  border: 0;
-
+  align-items: center;
   color: $pagination-color;
-  display: block;
-  font-size: $btn-font-size;
-  font-weight: $btn-font-weight;
-  line-height: $btn-line-height;
+  display: flex;
+  font-size: $pagination-font-size;
+  font-weight: $pagination-font-weight;
+  justify-content: center;
+  line-height: $pagination-line-height;
   margin-left: $pagination-inner-spacer-x;
-  padding: $btn-padding-y $btn-padding-x;
+  min-width: $pagination-line-height * $pagination-font-size;
+  padding: 0 10px;
   position: relative;
   text-align: center;
   white-space: nowrap;
 
-  @include active-focus-hover {
+  @include hover-focus-active {
+    background-color: rgba($black, $overlay-hover-white-opacity);
     color: $pagination-color;
     text-decoration: none;
-  }
-
-  @include focus-hover {
-    background-image: linear-gradient(to bottom, $btn-overlay, $btn-overlay);
-  }
-
-  &.active,
-  &:active {
-    background-color: $btn-bg-active;
-    background-image: none;
+    z-index: 3;
   }
 
   &:focus {
-    outline: 0;
+    background-color: rgba($black, $overlay-focus-white-opacity);
+    outline: none;
+  }
+
+  &:active {
+    background-color: rgba($black, $overlay-pressed-white-opacity);
   }
 
   &:not(:disabled):not(.disabled) {
     cursor: pointer;
   }
+}
 
-  .page-item:first-child & {
-    margin-left: 0;
+.page-item {
+  &:first-child {
+    .page-link {
+      margin-left: 0;
+    }
   }
 
-  .page-item.active & {
-    background-color: $btn-bg-active;
+  // stylelint-disable
+  &.active .page-link {
+    background-color: theme-color(primary);
+    color: $white;
+    z-index: 3;
   }
 
-  .page-item.disabled & {
+  &.disabled .page-link {
     background-color: transparent;
     color: $pagination-color-disabled;
     cursor: auto;
     pointer-events: none;
   }
+  // stylelint-enable
 }
 
+//
+// Sizing
+//
+
 .pagination-lg .page-link {
-  font-size: $btn-font-size-lg;
-  padding: $btn-padding-y-lg $btn-padding-x-lg;
+  border-radius: ($pagination-line-height * $pagination-font-size-lg) / 2;
+  font-size: $pagination-font-size-lg;
+  width: $pagination-line-height * $pagination-font-size-lg;
 }
 
 .pagination-sm .page-link {
-  font-size: $btn-font-size-sm;
-  padding: $btn-padding-y-sm $btn-padding-x-sm;
+  font-size: $pagination-font-size-sm;
+  min-width: 0;
+  width: $pagination-line-height * $pagination-font-size-sm;
 }

@@ -1,0 +1,97 @@
+// stylelint-disable declaration-empty-line-before
+
+.toast-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: $snackbar-margin;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: (map-get($dialog-elevation-shadow, elevation) - 1);
+}
+
+.toast {
+  background-color: $snackbar-bg;
+  border-radius: $snackbar-border-radius;
+  box-shadow: map-get($snackbar-elevation-shadow, shadow);
+  color: $snackbar-color;
+  display: block;
+  // Prevents from shrinking in IE11, when in a flex container
+  // See https://github.com/twbs/bootstrap/issues/28341
+  flex-basis: $snackbar-max-width;
+  letter-spacing: $letter-spacing-body-2;
+  line-height: $line-height-body-2;
+  max-width: $snackbar-max-width;
+  min-width: $snackbar-min-width;
+  opacity: 0;
+  padding: $snackbar-padding-y $snackbar-padding-x;
+  z-index: map-get($dialog-elevation-shadow, elevation);
+
+  &.showing {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  &.show {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.15s cubic-bezier(0, 0, 0.2, 1), transform 0.15s cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  &.hide {
+    display: none;
+  }
+
+  .close {
+    align-items: flex-start;
+    border-radius: 50%;
+    color: rgba($white, 0.87);
+    display: flex;
+    height: 36px;
+    justify-content: center;
+    line-height: 0;
+    margin-right: $snackbar-padding-x;
+    padding: 9px;
+    width: 36px;
+  }
+
+  .btn {
+    background: transparent;
+    box-shadow: none;
+    color: $snackbar-btn-color;
+    margin-top: -$spacer-sm;
+    margin-bottom: -$spacer-sm;
+    padding: 0 $spacer-sm;
+
+    &:first-of-type {
+      margin-left: auto;
+    }
+
+    &:last-of-type {
+      margin-right: -$spacer-sm;
+    }
+  }
+
+  .btn:hover,
+  .close:hover {
+    background-color: rgba($white, $overlay-hover-colored-opacity);
+  }
+
+  .btn:active,
+  .close:active {
+    background-color: rgba($white, $overlay-pressed-colored-opacity);
+  }
+}
+
+.toast-header,
+.toast-body {
+  align-items: center;
+  display: flex;
+}
+
+.toast-header + .toast-body {
+  padding-top: $spacer;
+}

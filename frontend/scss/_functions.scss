@@ -1,32 +1,59 @@
+// Bootstrap functions
+//
+// Utility mixins and functions for evaluating source code across our variables, maps, and mixins.
+
+// stylelint-disable at-rule-empty-line-before
+
+// Ascending
+// Used to evaluate Sass maps like our grid breakpoints.
 @mixin _assert-ascending($map, $map-name) {
   $prev-key: null;
   $prev-num: null;
 
   @each $key, $num in $map {
-    @if $prev-num == null {
+    @if $prev-num == null or unit($num) == '%' or unit($prev-num) == '%' {
       // Do nothing
-    } @else if not comparable($num, $prev-num) {
-      @warn 'Potentially invalid value for #{$map-name}: This map must be in ascending order, but key "#{$key}" has value #{$num} whose unit makes it incomparable to #{$prev-num}, the value of the previous key "#{$prev-key}"!';
-    } @else if $num <= $prev-num {
-      @warn 'Invalid value for #{$map-name}: This map must be in ascending order, but key "#{$key}" has value #{$num} which is not greater than #{$prev-num}, the value of the previous key "#{$prev-key}"!';
+    } @else if not comparable($prev-num, $num) {
+      @warn "Potentially invalid value for #{$map-name}: This map must be in ascending order, but key '#{$key}' has value #{$num} whose unit makes it incomparable to #{$prev-num}, the value of the previous key '#{$prev-key}' !";
+    } @else if $prev-num >= $num {
+      @warn "Invalid value for #{$map-name}: This map must be in ascending order, but key '#{$key}' has value #{$num} which isn't greater than #{$prev-num}, the value of the previous key '#{$prev-key}' !";
     }
-
     $prev-key: $key;
     $prev-num: $num;
   }
 }
 
-@mixin _assert-starts-at-zero($map) {
-  $first-value: nth(map-values($map), 1);
+// Starts at zero
+// Used to ensure the min-width of the lowest breakpoint starts at 0.
+@mixin _assert-starts-at-zero($map, $map-name: '$grid-breakpoints') {
+  @if length($map) > 0 {
+    $values: map-values($map);
+    $first-value: nth($values, 1);
 
-  @if $first-value != 0 {
-    @warn 'First breakpoint in `$grid-breakpoints` must start at 0, but starts at #{$first-value}.';
+    @if $first-value != 0 {
+      @warn 'First breakpoint in #{$map-name} must start at 0, but starts at #{$first-value}.';
+    }
   }
 }
 
-// Colour contrast
+// See https://codepen.io/kevinweber/pen/dXWoRw
+@function escape-svg($string) {
+  @if str-index($string, 'data:image/svg+xml') {
+    @each $char, $encoded in $escaped-characters {
+      // Do not escape the url brackets
+      @if str-index($string, 'url(') == 1 {
+        $string: url('#{str-replace(str-slice($string, 6, -3), $char, $encoded)}');
+      } @else {
+        $string: str-replace($string, $char, $encoded);
+      }
+    }
+  }
 
-@function color-yiq($color) {
+  @return $string;
+}
+
+// Color contrast
+@function color-yiq($color) { // color-yiq($color, $dark: $yiq-text-dark, $light: $yiq-text-light) {
   $r: red($color);
   $g: green($color);
   $b: blue($color);
@@ -41,6 +68,7 @@
 }
 
 // Replace `$key` with `$replace` in `$content`
+// Different from BS 4.4.1
 
 @function str-replace($content, $key, $replace: '') {
   $index: str-index($content, $key);
@@ -70,8 +98,55 @@
   @return map-get(map-get($theme-colors, $key), light);
 }
 
+// Return valid calc
+@function add($value1, $value2, $return-calc: true) {
+  @if $value1 == null {
+    @return $value2;
+  }
+
+  @if $value2 == null {
+    @return $value1;
+  }
+
+  @if type-of($value1) == number and type-of($value2) == number and comparable($value1, $value2) {
+    @return $value1 + $value2;
+  }
+
+  @return if($return-calc == true, calc(#{$value1} + #{$value2}), $value1 + unquote(' + ') + $value2);
+}
+
+@function subtract($value1, $value2, $return-calc: true) {
+  @if $value1 == null and $value2 == null {
+    @return null;
+  }
+
+  @if $value1 == null {
+    @return -$value2;
+  }
+
+  @if $value2 == null {
+    @return $value1;
+  }
+
+  @if type-of($value1) == number and type-of($value2) == number and comparable($value1, $value2) {
+    @return $value1 - $value2;
+  }
+
+  @return if($return-calc == true, calc(#{$value1} - #{$value2}), $value1 + unquote(' - ') + $value2);
+}
+
 // Strip unit
 
 @function strip-unit($val) {
   @return $val / ($val * 0 + 1);
+}
+
+// Use secondary color for selection controls/inputs
+
+@function selection-theme-color() {
+  @if $secondary-color-for-controls {
+    @return theme-color(secondary);
+  } @else {
+    @return theme-color(primary);
+  }
 }

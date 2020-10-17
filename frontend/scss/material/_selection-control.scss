@@ -1,8 +1,13 @@
+// Checkboxes and radios
+//
+// Base class takes care of all the key behavioral aspects.
+
 .custom-control {
   display: block;
-  min-height: ($font-size-base * $line-height-base);
-  padding-left: ($selection-control-indicator-size + $selection-control-spacer-x);
+  min-height: $font-size-base * $line-height-base;
+  padding-left: $selection-control-spacer-x + $selection-control-indicator-size;
   position: relative;
+  z-index: 1;
 
   + .custom-control {
     margin-top: $selection-control-spacer-y;
@@ -10,8 +15,9 @@
 }
 
 .custom-control-inline {
+  align-items: center;
   display: inline-flex;
-  margin-right: ($selection-control-spacer-x * 2);
+  margin-right: $selection-control-spacer-x * 2;
 
   + .custom-control-inline {
     margin-top: 0;
@@ -22,19 +28,17 @@
 
 .custom-control-label {
   color: inherit;
-  font-size: $textfield-font-size;
-  line-height: inherit;
+  font-size: $font-size-body-2;
+  letter-spacing: $letter-spacing-body-2;
+  line-height: $line-height-body-2;
   margin-bottom: 0;
+  //position: relative;
+  user-select: none; // djibe addition
+  vertical-align: top;
 
-  &::after {
-    color: $selection-control-color;
-    position: absolute;
-    top: (($font-size-base * $line-height-base - $selection-control-indicator-size) / 2);
-    left: 0;
-  }
-
+  // Background-color and (when enabled) gradient
   &::before {
-    @include transition-standard(background-color, opacity, transform);
+    @include transition-control(background-color, opacity, transform);
 
     background-color: currentColor;
     border-radius: 50%;
@@ -51,15 +55,47 @@
     transform: scale(0.87, 0.87) translateZ(0);
     width: ($selection-control-indicator-size * 2);
   }
+
+  // Foreground (icon)
+  &::after {
+    color: $selection-control-color;
+    display: block;
+    position: absolute;
+    top: (($font-size-base * $line-height-base - $selection-control-indicator-size) / 2);
+    left: 0;
+  }
 }
 
 .custom-control-input {
+  height: ($font-size-base * $line-height-base + $custom-control-indicator-size) / 2;
   opacity: 0;
   position: absolute;
+  left: 0; // https://github.com/twbs/bootstrap/commit/b165aff2f779c831efd8b3484e3ea7bc1c8f8eb4
+  width: $custom-control-indicator-size;
   z-index: -1;
 
-  &.focus,
-  &:active {
+  &[disabled] {
+    ~ .custom-control-label {
+      color: $selection-control-color-disabled;
+
+      &::after {
+        color: $selection-control-color-disabled;
+      }
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  &:not([disabled]):hover {
+    ~ .custom-control-label {
+      cursor: pointer; // djibe addition
+    }
+  }
+
+  &:active,
+  &.focus {
     ~ .custom-control-label::before {
       opacity: $selection-control-radial-opacity;
       transform: scale(1, 1) translateZ(0);
@@ -77,25 +113,18 @@
       }
     }
   }
-
-  &:disabled ~ {
-    .custom-control-label {
-      color: $selection-control-color-disabled;
-
-      &::after {
-        color: $selection-control-color-disabled;
-      }
-
-      &::before {
-        display: none;
-      }
-    }
-  }
 }
 
-// Checkbox
+// Checkboxes
+//
+// Tweak just a few things for checkboxes.
 
 .custom-checkbox {
+  &.custom-control {
+    align-items: center;
+    display: flex;
+  }
+
   .custom-control-label::after {
     @include set-material-icons;
 
@@ -112,6 +141,10 @@
     &:indeterminate ~ .custom-control-label::after {
       content: $selection-control-checkbox-icon-indeterminate;
     }
+
+    &:indeterminate:not([disabled]) ~ .custom-control-label::after {
+      color: $selection-control-color-active;
+    }
   }
 }
 
@@ -126,79 +159,117 @@
     vertical-align: middle;
   }
 
-  .custom-control-input {
-    &:checked ~ .custom-control-label::after {
+  .custom-control-input:checked ~ .custom-control-label {
+    &::after {
       content: $selection-control-radio-icon-checked;
+      // background-image: $custom-radio-indicator-icon-checked;
     }
   }
 }
 
-// Switch
+// switches
 
 .custom-switch {
-  padding-left: ($selection-control-track-width + $selection-control-spacer-x);
+  align-items: center;
+  display: flex;
+  flex-grow: 1;
+  padding-left: 36px;
 
   .custom-control-label {
-    @include transition-standard(background-color);
+    flex: 1;
 
-    &::after {
-      @include transition-standard(background-color, transform);
-
-      background-color: $selection-control-thumb-bg;
-      border-radius: 50%;
-      box-shadow: $selection-control-thumb-shadow;
+    // Slider Track
+    &::before {
+      background: $black; //rgba($black, $black-hint-opacity)
+      border-radius: $custom-switch-height / 2;
       content: '';
-      display: block;
-      height: $selection-control-indicator-size;
+      height: $custom-switch-height;
+      opacity: $black-hint-opacity; // 1
+      pointer-events: all;
       position: absolute;
-      width: $selection-control-indicator-size;
+      top: 15px; //15.5
+      transform: none;
+      transition: background-color $custom-switch-transition, transform $custom-switch-transition;
+      width: $custom-switch-width;
+      will-change: background-color, transform;
+    }
+
+    /* &:active::before {
+      opacity: 1;
+    } */
+
+    // Slider
+    &::after {
+      background: $white;
+      border-radius: 50%;
+      box-shadow: $custom-switch-handle-shadow;
+      content: '';
+      height: $custom-switch-handle-width;
+      position: absolute;
+      left: -$custom-switch-width / 2;
+      transform: translateX(0);
+      transition: transform $custom-switch-transition, box-shadow $custom-switch-transition;
+      width: $custom-switch-handle-width;
+      will-change: box-shadow, transform;
     }
   }
 
   .custom-control-input {
-    &:checked {
-      ~ .custom-control-label {
-        // scss-lint:disable NestingDepth
-        &::after,
-        &::before {
-          transform: translateX($selection-control-track-width - $selection-control-indicator-size);
-        }
+    &:active ~ .custom-control-label::before {
+      opacity: $black-hint-opacity;
+    }
 
-        &::after {
-          background-color: $selection-control-color-active;
-        }
-        // scss-lint:enable
+    &:checked ~ .custom-control-label {
+      &::before {
+        background: selection-theme-color(); // rgba(selection-theme-color(), $black-secondary-opacity);
+        // opacity: 1;
       }
 
-      ~ .custom-control-track {
-        background-color: rgba($selection-control-color-active, $selection-control-track-opacity);
+      &::after {
+        background: selection-theme-color();
+        transform: translateX($custom-switch-handle-width);
       }
     }
 
-    &:disabled {
-      ~ .custom-control-label::after {
-        background-color: $selection-control-thumb-bg-disabled;
-      }
+    // Hover
+    &:not(:checked):not(:disabled) ~ .custom-control-label:hover::after {
+      box-shadow: $custom-switch-handle-shadow, 0 0 0 $custom-switch-height rgba($black, $overlay-hover-white-opacity);
+    }
 
-      ~ .custom-control-track {
-        background-color: $selection-control-track-bg-disabled;
+    &:checked:not(:disabled) ~ .custom-control-label:hover::after {
+      box-shadow: $custom-switch-handle-shadow, 0 0 0 $custom-switch-height rgba(selection-theme-color(), $overlay-activated-white-opacity);
+    }
+
+    // Focus
+    &:not(:checked):focus ~ .custom-control-label::after {
+      box-shadow: $custom-switch-handle-shadow, 0 0 0 $custom-switch-height rgba($black, $overlay-hover-colored-opacity);
+    }
+
+    &:checked:focus ~ .custom-control-label::after {
+      box-shadow: $custom-switch-handle-shadow, 0 0 0 $custom-switch-height rgba(selection-theme-color(), $overlay-activated-white-opacity);
+    }
+
+    // stylelint-disable
+    // Disabled unchecked switch Slider + Track
+     &:disabled ~ .custom-control-label {
+      &::before {
+        background: $light-theme-1;
+        display: block;
+      }
+      &::after {
+        box-shadow: 0 3px 1px -2px rgba($black, 0.07), 0 2px 2px 0 rgba($black, 0.05), 0 1px 5px 0 rgba($black, 0.04); // 36% opacity on box-shadow
       }
     }
-  }
 
-  .custom-control-track {
-    @include transition-standard(background-color);
+    // Disabled checked switch Slider + Track
+    &:checked:disabled ~ .custom-control-label {
+      &::before {
+        background: mix(rgba(selection-theme-color(), $black-secondary-opacity), $white, $black-hint-opacity * 100%); // Workaround for RGBA to hex
+      }
 
-    background-clip: content-box;
-    background-color: $selection-control-track-bg;
-    border: (($selection-control-indicator-size - $selection-control-track-height) / 2) solid transparent;
-    border-radius: $selection-control-track-height;
-    content: '';
-    display: block;
-    height: $selection-control-indicator-size;
-    position: absolute;
-    top: (($font-size-base * $line-height-base - $selection-control-indicator-size) / 2);
-    left: 0;
-    width: $selection-control-track-width;
+      &::after {
+        background: mix(selection-theme-color(), $white, $black-hint-opacity * 100%); // Workaround for RGBA to hex
+      }
+    }
   }
 }
