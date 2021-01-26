@@ -3,6 +3,7 @@
 #
 FROM ubuntu:focal as base
 
+ARG TARGETARCH
 ENV TZ="UTC"
 
 # Run base build process
@@ -16,6 +17,23 @@ RUN chmod a+x /bd_build/*.sh \
     && rm -rf /bd_build
 
 # Install SFTPgo
+ENV SFTPGO_VERSION 1.2.2
+RUN case "${TARGETARCH}" in \
+      arm64) \
+         packageArch=linux_arm64 \
+         ;; \
+      amd64) \
+         packageName=linux_x86_64 \
+         ;; \
+      *) \
+         echo "sftpgo: Target architecture not supported; aborting build..." && exit 1 \
+         ;; \
+   esac \
+   \
+   && wget https://github.com/drakkan/sftpgo/releases/download/v${SFTPGO_VERSION}/sftpgo_v${SFTPGO_VERSION}_${packageArch}.tar.xz \
+   && mkdir -p /sftpgo/src \ 
+   && tar -C /usr/local/bin -xvzf $packageName \
+   && rm /$packageName
 COPY --from=azuracast/azuracast_golang_deps:latest /usr/local/bin/sftpgo /usr/local/bin/sftpgo
 
 # Install Dockerize
