@@ -4,6 +4,8 @@
 FROM ubuntu:focal as base
 
 ARG TARGETARCH
+ARG TARGETOS
+
 ENV TZ="UTC"
 
 # Run base build process
@@ -17,27 +19,39 @@ RUN chmod a+x /bd_build/*.sh \
     && rm -rf /bd_build
 
 # Install SFTPgo
-ENV SFTPGO_VERSION 1.2.2
-RUN case "${TARGETARCH}" in \
+ENV SFTPGO_VERSION v1.2.2
+
+RUN apt-get update \
+   && apt-get -y install xz-utils \
+   && case "${TARGETARCH}" in \
       arm64) \
          packageArch=linux_arm64 \
          ;; \
       amd64) \
-         packageName=linux_x86_64 \
+         packageArch=linux_x86_64 \
          ;; \
       *) \
          echo "sftpgo: Target architecture not supported; aborting build..." && exit 1 \
          ;; \
    esac \
    \
-   && wget https://github.com/drakkan/sftpgo/releases/download/v${SFTPGO_VERSION}/sftpgo_v${SFTPGO_VERSION}_${packageArch}.tar.xz \
-   && mkdir -p /sftpgo/src \ 
-   && tar -C /usr/local/bin -xvzf $packageName \
-   && rm /$packageName
-COPY --from=azuracast/azuracast_golang_deps:latest /usr/local/bin/sftpgo /usr/local/bin/sftpgo
+   && mkdir -p /sftpgo/src \
+   && cd /sftpgo/src \
+   && wget https://github.com/drakkan/sftpgo/releases/download/${SFTPGO_VERSION}/sftpgo_${SFTPGO_VERSION}_${packageArch}.tar.xz \
+   && tar -xf sftpgo_${SFTPGO_VERSION}_${packageArch}.tar.xz \
+   && mv ./sftpgo /usr/local/bin/ \
+   && rm -rf /sftpgo \
+   && apt-get purge -y --auto-remove xz-utils \
+   && rm -rf /var/lib/apt/lists/*
 
 # Install Dockerize
-COPY --from=azuracast/azuracast_golang_deps:latest /usr/local/bin/dockerize /usr/local/bin/dockerize
+ENV DOCKERIZE_VERSION v0.7.0
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends wget ca-certificates openssl \
+    && wget https://github.com/voxxit/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-${TARGETOS}-${TARGETARCH}-${DOCKERIZE_VERSION}.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-${TARGETOS}-${TARGETARCH}-${DOCKERIZE_VERSION}.tar.gz \
+    && rm dockerize-${TARGETOS}-${TARGETARCH}-${DOCKERIZE_VERSION}.tar.gz
 
 #
 # START Operations as `azuracast` user
